@@ -2,9 +2,12 @@
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { auth } from "@/firebase/client";
-import { signUP } from "@/lib/actions/auth.actions";
+import { signIN, signUP } from "@/lib/actions/auth.actions";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -58,10 +61,26 @@ const AuthForm = ({ type }: { type: FormType }) => {
           return;
         }
 
-        console.log("Sign Up Form", values);
         toast.success("Account Created Successfully. Please Sign In");
         router.push("/signin");
       } else {
+        const { email, password } = values;
+
+        const userCredentials = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+        const idToken = await userCredentials.user.getIdToken();
+
+        if (!idToken) {
+          toast.error("Sign In Failed");
+          return;
+        }
+
+        await signIN({ email, idToken });
+
         toast.success("Sign In Successfully!");
         router.push("http://localhost:3000");
       }
