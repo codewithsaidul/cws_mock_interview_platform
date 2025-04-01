@@ -85,3 +85,34 @@ export const setSessionCookie = async (idToken: string) => {
     sameSite: "lax",
   });
 };
+
+// ========================= Get The Current User ===========================
+export const getCurrentUser = async (): Promise<User | null> => {
+  const cookieStore = await cookies();
+
+  const sessionCookie = cookieStore.get("session")?.value;
+
+  if (!sessionCookie) return null;
+
+  try {
+    const decodeClaims = await auth.verifySessionCookie(sessionCookie, true);
+
+    const userRecord = await db.collection("users").doc(decodeClaims.uid).get();
+
+    if (!userRecord) return null;
+
+    return {
+      ...userRecord.data(),
+      id: userRecord.id,
+    } as User;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const isAuthenticated = async () => {
+  const user = await getCurrentUser();
+
+  return !!user;
+};
