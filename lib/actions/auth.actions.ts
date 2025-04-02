@@ -111,8 +111,45 @@ export const getCurrentUser = async (): Promise<User | null> => {
   }
 };
 
+// ======================== Checking User Authenticated or not =====================
 export const isAuthenticated = async () => {
   const user = await getCurrentUser();
 
   return !!user;
+};
+
+// ================================== Get Interviews By UserId =========================
+export const getInterviewByUserId = async (
+  userId: string | undefined
+): Promise<Interview[]> => {
+  const interviews = await db
+    .collection("interviews")
+    .where("userId", "==", userId)
+    .orderBy("createdAt", "desc")
+    .get();
+
+  return interviews.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(), // Make sure to call data() instead of accessing it directly
+  })) as Interview[];
+};
+
+// ====================================== Get All Interviews ===========================
+export const getLatestInterviews = async (
+  params: GetLatestInterviewsParams
+): Promise<Interview[]> => {
+  const { userId, limit = 20 } = params;
+
+  const interviews = await db
+    .collection("interviews")
+    .orderBy("createdAt", "desc")
+    .where("finalized", "==", true)
+    .where("userId", "!=", userId)
+    .limit(limit)
+    .get();
+
+  return interviews.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(), // Make sure to call data() instead of accessing it directly
+  })) as Interview[];
 };

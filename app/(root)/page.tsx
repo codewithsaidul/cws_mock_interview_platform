@@ -1,10 +1,27 @@
 import InterviewCard from "@/components/InterviewCard";
 import { Button } from "@/components/ui/button";
-import { dummyInterviews } from "@/constants";
+import {
+  getCurrentUser,
+  getInterviewByUserId,
+  getLatestInterviews,
+} from "@/lib/actions/auth.actions";
 import Image from "next/image";
 import Link from "next/link";
 
-const HomePage = () => {
+const HomePage = async () => {
+  const user = await getCurrentUser();
+
+  const [userInterviews, latestInterviews] = await Promise.all([
+    await getInterviewByUserId(user?.id),
+    await getLatestInterviews({ userId: user?.id }),
+  ]);
+
+  // const userInterviews = await getInterviewByUserId(user?.id);
+  // const latestInterviews = await getLatestInterviews({ userId: user?.id });
+  const hasPastInterviews = userInterviews?.length > 0;
+  const hasUpcomingInterviews = latestInterviews?.length > 0;
+  console.log(latestInterviews);
+
   return (
     <>
       {/* ==================== Header of Home Page ==================== */}
@@ -34,9 +51,13 @@ const HomePage = () => {
       <section className="flex flex-col gap-6 mt-8">
         <h2>Your Interviews</h2>
         <div className="interviews-section">
-          {dummyInterviews.map((interview) => (
-            <InterviewCard key={interview.id} {...interview} />
-          ))}
+          {hasPastInterviews ? (
+            userInterviews?.map((interview) => (
+              <InterviewCard key={interview.id} {...interview} />
+            ))
+          ) : (
+            <p>You Haven&apos;t taken any interviews yet</p>
+          )}
           {/* <p>You Haven&apos;t taken any interviews yet</p> */}
         </div>
       </section>
@@ -47,9 +68,13 @@ const HomePage = () => {
         <h2>Take Interviews</h2>
 
         <div className="interviews-section">
-          {dummyInterviews.map((interview) => (
-            <InterviewCard key={interview.id} {...interview} />
-          ))}
+          {hasUpcomingInterviews ? (
+            latestInterviews?.map((interview) => (
+              <InterviewCard key={interview.id} {...interview} />
+            ))
+          ) : (
+            <p>There are no interviews available</p>
+          )}
           {/* <p>There are no interviews available</p> */}
         </div>
       </section>
