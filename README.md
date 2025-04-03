@@ -2,7 +2,9 @@
 
 **PrepWise** is an innovative platform that helps users prepare for interviews by offering mock interview sessions with personalized questions. The website provides users with the ability to generate interview questions based on their preferences, take mock interviews, and receive feedback, all through voice calls.
 
-![Homepage Screenshot](<[public/prepwiseHome.png](https://github.com/codewithsaidul/cws_mock_interview_platform/blob/main/public/prepwiseHome.png)>)
+## Homepage Screenshot
+
+<img src="/homepage.png" alt="Homepage Screenshot" width="600" />
 
 ## Features
 
