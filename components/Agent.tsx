@@ -1,6 +1,7 @@
 "use client";
 
 import { interviewer } from "@/constants";
+import { createFeedback } from "@/lib/actions/general.action";
 import { cn } from "@/lib/utils";
 import { vapi } from "@/lib/vapi.sdk";
 import Image from "next/image";
@@ -30,24 +31,6 @@ const Agent = ({
   const [isSpeacking, setIsSpeacking] = useState(false);
   const [callStatus, setCallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
   const [messages, setMessages] = useState<SavedMessage[]>([]);
-
-  const handleGenerateFeedback = async (messages: SavedMessage[]) => {
-    console.log("Generate Feedback here.");
-
-    const { success, id } = {
-      success: true,
-      id: "feedback-id",
-    };
-
-    console.log(messages);
-
-    if (success && id) {
-      router.push(`/interview/${interviewId}/feedback`);
-    } else {
-      console.log("Error saving feedback");
-      router.push("/");
-    }
-  };
 
   useEffect(() => {
     const onCallStart = () => setCallStatus(CallStatus.ACTIVE);
@@ -84,14 +67,33 @@ const Agent = ({
   }, []);
 
   useEffect(() => {
+    const handleGenerateFeedback = async (messages: SavedMessage[]) => {
+      console.log("Generate Feedback here.");
+
+      const { success, feedbackId: id } = await createFeedback({
+        interviewId: interviewId!,
+        userId: userId!,
+        transcript: messages,
+      });
+
+      console.log(messages);
+
+      if (success && id) {
+        router.push(`/interview/${interviewId}/feedback`);
+      } else {
+        console.log("Error saving feedback");
+        router.push("/");
+      }
+    };
+
     if (callStatus === CallStatus.FINISHED) {
       if (type === "generate") {
         return router.push("/");
       } else {
-        handleGenerateFeedback(meessages);
+        handleGenerateFeedback(messages);
       }
     }
-  }, [router, messages, callStatus, handleGenerateFeedback, userId, type]);
+  }, [router, messages, callStatus, interviewId, userId, type]);
 
   const handleCall = async () => {
     setCallStatus(CallStatus.CONNECTING);
