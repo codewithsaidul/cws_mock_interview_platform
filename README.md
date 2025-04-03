@@ -1,10 +1,10 @@
 # PrepWise - Mock Interview Platform
 
-![PrepWise Logo](https://prepwise-sigma.vercel.app/logo.png)
+![PrepWise Logo](https://prepwise-sigma.vercel.app/logo.svg)
 
 **PrepWise** is an innovative platform that helps users prepare for interviews by offering mock interview sessions with personalized questions. The website provides users with the ability to generate interview questions based on their preferences, take mock interviews, and receive feedback, all through voice calls.
 
-![Homepage Screenshot](https://prepwise-sigma.vercel.app/homepage.png)
+![Homepage Screenshot](https://prepwise-sigma.vercel.app/prepwiseHome.png)
 
 ## Features
 
