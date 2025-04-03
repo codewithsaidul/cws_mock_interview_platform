@@ -4,7 +4,7 @@
 
 ## Homepage Screenshot
 
-![website image](/prepwiseHome.png)
+![website image](./public/prepwiseHome.png)
 
 ## Features
 
