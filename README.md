@@ -4,7 +4,7 @@
 
 ## Homepage Screenshot
 
-<img src="/homepage.png" alt="Homepage Screenshot" width="600" />
+![website image](/prepwiseHome.png)
 
 ## Features
 
