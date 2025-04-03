@@ -82,7 +82,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
         await signIN({ email, idToken });
 
         toast.success("Sign In Successfully!");
-        router.push("http://localhost:3000");
+        router.push("https://prepwise-sigma.vercel.app");
       }
     } catch (error) {
       console.log(error);

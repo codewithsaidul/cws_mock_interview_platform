@@ -16,11 +16,8 @@ const HomePage = async () => {
     await getLatestInterviews({ userId: user?.id }),
   ]);
 
-  // const userInterviews = await getInterviewByUserId(user?.id);
-  // const latestInterviews = await getLatestInterviews({ userId: user?.id });
   const hasPastInterviews = userInterviews?.length > 0;
   const hasUpcomingInterviews = latestInterviews?.length > 0;
-  console.log(latestInterviews);
 
   return (
     <>

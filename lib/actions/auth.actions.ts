@@ -117,3 +117,28 @@ export const isAuthenticated = async () => {
 
   return !!user;
 };
+
+// ===================== Set the Session Cookie ============================
+export const removeSessionCookie = async () => {
+  const cookieStore = await cookies();
+
+  cookieStore.delete("session");
+};
+
+export const logOutUser = async () => {
+  try {
+    await removeSessionCookie();
+
+    return {
+      success: true,
+      message: "Logged out successfully.",
+    };
+  } catch (e) {
+    console.log(e);
+
+    return {
+      success: false,
+      message: "Failed to log out.",
+    };
+  }
+};
